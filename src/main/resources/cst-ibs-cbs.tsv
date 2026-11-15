@@ -1,0 +1,12 @@
+000	Tributação integral		TRIB
+010	Tributação com alíquotas uniformes		TRIB
+011	Tributação com alíquotas uniformes reduzidas		TRIB
+200	Alíquota reduzida		TRIB
+221	Alíquota fixa proporcional		TRIB
+400	Isenção		
+410	Imunidade e não incidência		
+515	Diferimento com redução de alíquota		TRIB
+550	Suspensão		TRIB
+800	Transferência de crédito		
+811	Ajustes		
+820	Tributação em documento específico		

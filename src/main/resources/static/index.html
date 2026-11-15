@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ERP Notas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <strong>ERP Notas</strong>
+    <span class="selo">SIMULAÇÃO — sem validade fiscal</span>
+    <span id="usuario" class="direita"></span>
+    <button id="sair" class="secundario" hidden>Sair</button>
+</header>
+
+<p id="aviso" role="status" hidden></p>
+
+<main id="entrada">
+    <form id="form-login" class="cartao">
+        <h2>Entrar</h2>
+        <label>E-mail <input name="email" type="email" required autocomplete="username"></label>
+        <label>Senha <input name="senha" type="password" required autocomplete="current-password"></label>
+        <button>Entrar</button>
+    </form>
+</main>
+
+<div id="app" hidden>
+    <nav id="menu"></nav>
+    <main id="conteudo"></main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
