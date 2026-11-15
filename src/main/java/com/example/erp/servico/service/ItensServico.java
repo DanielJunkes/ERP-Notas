@@ -33,7 +33,7 @@ public class ItensServico {
     }
 
     public enum Tabela {
-        /** Subitens da LC 116/2003 com desdobramento municipal (idealsoftwares.com.br, id=87, sem os revogados). */
+        /** Subitens da LC 116/2003 com desdobramento municipal, sem os revogados. */
         MUNICIPAIS("municipais", "itens-servico.tsv"),
         /** Lista Nacional de Serviços, cTribNac: aba "MUN.INCID_INFO.SERV." do Anexo I do leiaute DPS v1.01. */
         NACIONAIS("nacionais", "codigos-tributacao-nacional.tsv"),
@@ -41,11 +41,11 @@ public class ItensServico {
         NBS("nbs", "codigos-nbs.tsv"),
         /** cIndOp: tabela "código indicador de operação" (Tabela-indOper.xlsx), só os vigentes. */
         INDICADORES_OPERACAO("indicadores-operacao", "indicadores-operacao.tsv"),
-        /** CST do IBS/CBS que têm cClassTrib válido para NFS-e (Portal da Conformidade Fácil, SVRS). */
+        /** CST do IBS/CBS que têm cClassTrib válido para NFS-e (tabela oficial de classificação tributária). */
         CST("cst", "cst-ibs-cbs.tsv"),
-        /** cClassTrib válidos para NFS-e e vigentes (Portal da Conformidade Fácil, SVRS). */
+        /** cClassTrib válidos para NFS-e e vigentes (tabela oficial de classificação tributária). */
         CLASSIFICACOES("cclasstrib", "cclasstrib-ibs-cbs.tsv"),
-        /** Municípios do IBGE (código de 7 dígitos, nome e UF no campo grupo), ibge.gov.br/explica/codigos-dos-municipios.php. */
+        /** Municípios do IBGE: código de 7 dígitos, nome e UF (no campo grupo). */
         MUNICIPIOS("municipios", "municipios-ibge.tsv");
 
         private final String caminho;

@@ -179,9 +179,9 @@ POST /notas-fiscais  ──▶  PENDENTE ──emitir──▶ AUTORIZADA ──
    - **autoriza** nos demais casos, devolvendo a NFS-e no leiaute nacional (ver abaixo), com o número da DPS como número da NFS-e e a chave de acesso de 50 dígitos (gravada em `codigoVerificacao`).
 3. A nota grava o status, a mensagem de retorno, o XML da DPS e o XML da NFS-e. Tudo isso pode ser consultado em `GET /api/notas-fiscais/{id}/emissao`, e o XML pode ser salvo pela tela de detalhes.
 
-### NFS-e simulada no leiaute nacional (importação no Domínio)
+### NFS-e simulada no leiaute nacional
 
-A NFS-e devolvida pelo simulador segue o leiaute da **NFS-e Nacional v1.01** (Anexo I, linhas 1 a 97): raiz `NFSe`, grupo `infNFSe` e a DPS dentro dele. É o formato do arquivo XML do Portal Nacional que o Domínio importa ("Importação de NFS-e Padrão Nacional").
+A NFS-e devolvida pelo simulador segue o leiaute da **NFS-e Nacional v1.01** (Anexo I, linhas 1 a 97): raiz `NFSe`, grupo `infNFSe` e a DPS dentro dele. É o mesmo formato do XML da NFS-e gerada pelo Sistema Nacional.
 
 | Grupo | Como é gerado |
 |---|---|
@@ -192,11 +192,11 @@ A NFS-e devolvida pelo simulador segue o leiaute da **NFS-e Nacional v1.01** (An
 | `IBSCBS` | `vBC` = serviço − desconto − ISSQN; alíquotas de `app.nfse.simulacao.*` (padrão CBS 0,90%, IBS estadual 0,10%, municipal 0%) com a redução do `cClassTrib`; zero quando o CST não exige tributo; `vTotNF` = `vLiq` em 2026 |
 | `xOutInf` | `SIMULACAO - DOCUMENTO SEM VALIDADE FISCAL` |
 
-> **Antes de importar em outro sistema:** a NFS-e **não é assinada**, sai com `tpAmb = 2` (homologação) e **não tem validade fiscal**. Importe só numa empresa de teste. O algoritmo do DV da chave não está no Anexo I (usa o da NF-e) e as alíquotas do IBS/CBS são de configuração, não da Calculadora da Receita: confira os dois.
+> **Atenção:** a NFS-e **não é assinada**, sai com `tpAmb = 2` (homologação) e **não tem validade fiscal**. Use o XML só para estudo e testes. O algoritmo do DV da chave não está no Anexo I (usa o da NF-e) e as alíquotas do IBS/CBS são de configuração, não da Calculadora da Receita: confira os dois.
 
 ### Leiaute da DPS
 
-A DPS segue o leiaute **DPS v1.01** do Anexo I da NFS-e Nacional (`anexo_i-sefin_adn-dps_nfse-snnfse-v1-01-20260209.xlsx`): namespace `http://www.sped.fazenda.gov.br/nfse`, ordem dos grupos e `Id` = `"DPS"` + município (7) + tipo de inscrição (1) + CNPJ (14) + série (5) + número (15). Ela sai com `tpAmb = 2` (homologação) e um comentário `SIMULACAO - DOCUMENTO SEM VALIDADE FISCAL`, **sem assinatura e sem envio à Sefin**.
+A DPS segue o leiaute **DPS v1.01** do Anexo I da NFS-e Nacional (`anexo_i-sefin_adn-dps_nfse-snnfse-v1-01-20260209.xlsx`): namespace oficial da NFS-e Nacional, ordem dos grupos e `Id` = `"DPS"` + município (7) + tipo de inscrição (1) + CNPJ (14) + série (5) + número (15). Ela sai com `tpAmb = 2` (homologação) e um comentário `SIMULACAO - DOCUMENTO SEM VALIDADE FISCAL`, **sem assinatura e sem envio à Sefin**.
 
 | Grupo da DPS | De onde vem |
 |---|---|
@@ -215,16 +215,15 @@ Ficam em `src/main/resources` e são conferidas no cadastro do serviço (`422`) 
 
 | Tabela | Arquivo | Origem | Itens |
 |---|---|---|---|
-| Itens de serviço municipais (LC 116) | `itens-servico.tsv` | idealsoftwares.com.br, tabela 87, sem os revogados | 990 |
+| Itens de serviço municipais (LC 116) | `itens-servico.tsv` | tabela de subitens da LC 116/2003 com desdobramento municipal, sem os revogados | 990 |
 | `cTribNac` (Lista Nacional de Serviços) | `codigos-tributacao-nacional.tsv` | aba "MUN.INCID_INFO.SERV." do Anexo I (DPS v1.01); marca os serviços que exigem obra, evento ou endereço do tomador | 337 |
 | `cNBS` (E0316) | `codigos-nbs.tsv` | NBS 2.0, Anexo I da Portaria Conjunta RFB/SCS (dez/2018); só os códigos completos de 9 dígitos | 920 |
 | `cIndOp` (E0901) | `indicadores-operacao.tsv` | `Tabela-indOper.xlsx`, só os vigentes; marca os 13 que exigem tomador com endereço (E0187/E0234) | 39 |
-| `CST` do IBS/CBS | `cst-ibs-cbs.tsv` | Portal da Conformidade Fácil (SVRS), CSTs que têm `cClassTrib` válido para NFS-e | 12 |
-| `cClassTrib` (E0958) | `cclasstrib-ibs-cbs.tsv` | Portal da Conformidade Fácil (SVRS), só os válidos para NFS-e e vigentes em 15/11/2026, com o CST de cada um | 73 |
+| `CST` do IBS/CBS | `cst-ibs-cbs.tsv` | tabela oficial de classificação tributária do IBS/CBS; CSTs que têm `cClassTrib` válido para NFS-e | 12 |
+| `cClassTrib` (E0958) | `cclasstrib-ibs-cbs.tsv` | tabela oficial de classificação tributária do IBS/CBS; só os válidos para NFS-e e vigentes em 15/11/2026, com o CST de cada um | 73 |
+| Municípios (código IBGE) | `municipios-ibge.tsv` | tabela de códigos dos municípios do IBGE (código, nome e UF) | 5.571 |
 
-| Municípios (código IBGE) | `municipios-ibge.tsv` | ibge.gov.br/explica/codigos-dos-municipios.php (código, nome e UF) | 5.571 |
-
-Na tela, cada código é um campo com busca, e escolher o `cClassTrib` preenche o CST. O município é escolhido pelo nome: o código IBGE é o que fica salvo, e cidade e UF são preenchidas pela tabela (o back end também as grava a partir do código, ignorando o que vier na requisição, e recusa código inexistente com `422`). As tabelas não se atualizam sozinhas: quando a Receita ou o portal publicarem uma versão nova, gere o arquivo de novo.
+Na tela, cada código é um campo com busca, e escolher o `cClassTrib` preenche o CST. O município é escolhido pelo nome: o código IBGE é o que fica salvo, e cidade e UF são preenchidas pela tabela (o back end também as grava a partir do código, ignorando o que vier na requisição, e recusa código inexistente com `422`). As tabelas não se atualizam sozinhas: quando os órgãos responsáveis publicarem uma versão nova, gere o arquivo de novo.
 
 ### Integração oficial (etapa futura)
 

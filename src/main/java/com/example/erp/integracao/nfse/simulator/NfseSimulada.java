@@ -23,7 +23,7 @@ import static com.example.erp.integracao.nfse.simulator.SimuladorEmissorNfse.tex
 /**
  * Monta a NFS-e simulada no leiaute oficial da NFS-e Nacional v1.01 (Anexo I, linhas 1 a 97): raiz NFSe, grupo infNFSe
  * com os dados que a Sefin Nacional geraria (chave, número, emitente, valores do ISSQN e totais de IBS/CBS) e a DPS
- * recebida dentro dele. É o formato que importadores como o do Domínio leem.
+ * recebida dentro dele, o mesmo formato da NFS-e gerada pelo Sistema Nacional.
  * Marcada como simulação: xOutInf e um comentário dizem "SIMULACAO - DOCUMENTO SEM VALIDADE FISCAL", e não há assinatura.
  * shortcut: o Anexo I não descreve o DV da chave; usa o módulo 11 da chave da NF-e. Conferir antes de uma integração real.
  */
